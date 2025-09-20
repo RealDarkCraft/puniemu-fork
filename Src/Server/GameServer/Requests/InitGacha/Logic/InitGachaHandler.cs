@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Puniemu.Src.Server.GameServer.Requests.InitGacha.DataClasses;
+using Puniemu.Src.Server.GameServer.DataClasses.Gacha.GachaStamp;
 using System.Buffers;
 using System.Text;
 
@@ -15,6 +16,21 @@ namespace Puniemu.Src.Server.GameServer.Requests.InitGacha.Logic
             ctx.Request.BodyReader.AdvanceTo(readResult.Buffer.End);
             var requestJsonString = NHNCrypt.Logic.NHNCrypt.DecryptRequest(encRequest);
             var deserialized = JsonConvert.DeserializeObject<InitGachaRequest>(requestJsonString!);
+            var res = new InitGachaResponse();
+
+            res.YwpMstGacha = JsonConvert.DeserializeObject<Dictionary<string, string>>(DataManager.Logic.DataManager.GameDataManager!.GamedataCache["ywp_mst_gacha"])!["tableData"];
+            res.YwpMstItem = JsonConvert.DeserializeObject<Dictionary<string, string>>(DataManager.Logic.DataManager.GameDataManager!.GamedataCache["ywp_mst_item"])!["tableData"];
+            if (DataManager.Logic.DataManager.GameDataManager!.GamedataCache.ContainsKey("gachaStampList"))
+            {
+                res.GachaStampList = JsonConvert.DeserializeObject<List<GachaStamp>>(DataManager.Logic.DataManager.GameDataManager.GamedataCache["gachaStampList"])!;
+            }
+            else
+            {
+                res.GachaStampList = new List<GachaStamp>();
+            }
+
+            var outResponse = NHNCrypt.Logic.NHNCrypt.EncryptResponse(JsonConvert.SerializeObject(res));
+            await ctx.Response.WriteAsync(outResponse);
 
         }
     }

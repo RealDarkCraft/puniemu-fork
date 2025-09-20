@@ -24,11 +24,11 @@ namespace Puniemu.Src.Server.GameServer.Requests.DeckEdit.Logic
             var tutorialList = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(deserialized!.Gdkey!, "ywp_user_tutorial_list");
             var tutorialListTable = new TableParser.Logic.TableParser(tutorialList!);
 
-            if (TutorialFlagManager.GetStatus(tutorialListTable, 1000) == 6)
+            if (TutorialFlagManager.GetStatus(tutorialListTable, 1000, 1) == 6)
             {
                 tutorialListTable = TutorialFlagManager.EditTutorialFlg(tutorialListTable, 1, 1000, 7);
             }
-            if (TutorialFlagManager.GetStatus(tutorialListTable, 1) == 0)
+            if (TutorialFlagManager.GetStatus(tutorialListTable, 1, 2) == 0)
             {
                 tutorialListTable = TutorialFlagManager.EditTutorialFlg(tutorialListTable, 2, 1, 1);
             }
@@ -55,7 +55,9 @@ namespace Puniemu.Src.Server.GameServer.Requests.DeckEdit.Logic
             resdict["ywp_user_youkai_deck"] = UserDeck.ToString();
             await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Gdkey!, "ywp_user_tutorial_list", tutorialListTable.ToString());
             resdict["ywp_user_tutorial_list"] = tutorialListTable.ToString();
-            resdict["ywp_user_data"] = userData!;
+            userData!.YoukaiId = long.Parse(UserDeck.Table[0][1]);
+            await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Gdkey!, "ywp_user_data", userData);
+            resdict["ywp_user_data"] = userData;
             foreach (var table in Consts.DECK_EDIT_TABLES)
             {
                 string? tableText = null!;
@@ -99,6 +101,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.DeckEdit.Logic
             var encryptedRes = NHNCrypt.Logic.NHNCrypt.EncryptResponse(JsonConvert.SerializeObject(resdict));
             ctx.Response.Headers.ContentType = "application/json";
             await ctx.Response.WriteAsync(encryptedRes);
+            GenerateFriendData.RefreshYwpUserFriend(deserialized.Gdkey!, -1, -1, "", userData!.YoukaiId, "");
         }
     }
 }

@@ -87,16 +87,6 @@ namespace Puniemu.Src.Server.GameServer.Requests.InitGacha.DataClasses
 
         [JsonProperty("bannerResourceList")]
         public List<BannerResource>? BannerResourceList { get; set; }
-
-        public static async Task BuildAsync()
-        {
-            var instance = new InitGachaResponse();
-
-            instance.YwpMstGacha = (string)JsonConvert.DeserializeObject<Dictionary<string,object>>(DataManager.Logic.DataManager.GameDataManager!.GamedataCache["ywp_mst_gacha"])["tableData"];
-            instance.YwpMstItem = (string)JsonConvert.DeserializeObject<Dictionary<string, object>>(DataManager.Logic.DataManager.GameDataManager!.GamedataCache["ywp_mst_item"])["tableData"];
-            instance.GachaStampList = JsonConvert.DeserializeObject<List<GachaStamp>>(DataManager.Logic.DataManager.GameDataManager.GamedataCache["gachaStampList"]);
-        }
-
     }
 }
  

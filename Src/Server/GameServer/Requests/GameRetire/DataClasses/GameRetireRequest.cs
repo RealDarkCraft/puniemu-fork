@@ -66,7 +66,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.GameRetire.DataClasses
         public List<UserYoukaiResultListReq>? UserYoukaiResultList { get; set; }
         // ywp_mst
         [JsonProperty("ywp_mst_game_const")]
-        public List<Dictionary<string,object>>? YwpMstGameConst { get; set; }
+        public List<Dictionary<string,object?>>? YwpMstGameConst { get; set; }
 
 
     }

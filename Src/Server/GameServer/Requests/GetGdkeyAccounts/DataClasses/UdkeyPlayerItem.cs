@@ -13,7 +13,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.GetGdkeyAccounts.DataClasses
         public string PlayerName { get; set; } // Name of the player
 
         [JsonProperty("youkaiId")]
-        public int PartnerYokaiID { get; set; } // The center yokai in the party
+        public long PartnerYokaiID { get; set; } // The center yokai in the party
 
         [JsonProperty("lastUpdateDate")]
         public string? LastUpdateDate { get; set; } // Last time the game was played
@@ -49,8 +49,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.GetGdkeyAccounts.DataClasses
 
             playerItem.IconID = (PlayerIcon)userData!.IconID;
             playerItem.PlayerName = userData.PlayerName;
-            var UserDeck = new TableParser.Logic.TableParser((await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(gdkey, "ywp_user_youkai_deck"))!);
-            playerItem.PartnerYokaiID = int.Parse(UserDeck.Table[0][1]);
+            playerItem.PartnerYokaiID = userData.YoukaiId;
             var startTimestamp = account.StartDate;
             var startTimestampString = DateTimeOffset.FromUnixTimeMilliseconds(startTimestamp).DateTime.ToString("yyyy-MM-dd HH:mm:ss");
             playerItem.StartDate = startTimestampString;
