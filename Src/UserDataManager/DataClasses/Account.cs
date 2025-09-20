@@ -10,8 +10,14 @@ namespace Puniemu.Src.UserDataManager.DataClasses
         [PrimaryKey("gdkey",false)]
         public string Gdkey { get; set; }
 
+        [Column("character_id")]
+        public string CharacterId { get; set; }
+
+        [Column("user_id")]
+        public string UserId { get; set; }
+
         [Column("ywp_user_tables")]
-        public Dictionary<string,object> YwpUserTables { get; set; }
+        public Dictionary<string,object?> YwpUserTables { get; set; }
 
         [Column("last_lgn_time")]
         public string LastLoginTime { get; set; }

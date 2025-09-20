@@ -23,7 +23,25 @@ using Puniemu.Src.Server.GameServer.Requests.GameUseItem.Logic;
 using Puniemu.Src.Server.GameServer.Requests.GameContinue.Logic;
 using Puniemu.Src.Server.GameServer.Requests.GameRetire.Logic;
 using Puniemu.Src.Server.GameServer.Requests.LoginStamp.Logic;
+using Puniemu.Src.Server.GameServer.Requests.InitGacha.Logic;
+using Puniemu.Src.Server.GameServer.Requests.ExecuteGacha.Logic;
+using Puniemu.Src.Server.GameServer.Requests.InitCollectMenu.Logic;
+using Puniemu.Src.Server.GameServer.Requests.Friend.Logic;
+using Puniemu.Src.Server.GameServer.Requests.FriendRequest.Logic;
+using Puniemu.Src.Server.GameServer.Requests.FriendSearch.Logic;
+using Puniemu.Src.Server.GameServer.Requests.FriendRequestDelete.Logic;
+using Puniemu.Src.Server.GameServer.Requests.InitGoku.Logic;
+using Puniemu.Src.Server.GameServer.Requests.UpdateGokuStory.Logic;
+using Puniemu.Src.Server.GameServer.Requests.UpdateGokuMenu.Logic;
+using Puniemu.Src.Server.GameServer.Requests.InitCrystal.Logic;
+using Puniemu.Src.Server.GameServer.Requests.UpdateCrystalMenu.Logic;
+using Puniemu.Src.Server.GameServer.Requests.FriendDelete.Logic;
+using Puniemu.Src.Server.GameServer.Requests.GetPresentBox.Logic;
+
+
 using Puniemu.Src.Utils.GeneralUtils;
+using Puniemu.Src.Server.GameServer.Requests.FriendRequestAccept.Logic;
+using Puniemu.Src.Server.GameServer.Requests.GetRanking.Logic;
 
 namespace Puniemu.Src;
 class Program
@@ -154,6 +172,70 @@ class Program
         app.MapPost("/loginStamp.nhn", async ctx =>
         {
             await LoginStampHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/initGacha.nhn", async ctx =>
+        {
+            await InitGachaHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/executeGacha.nhn", async ctx =>
+        {
+            await ExecuteGachaHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/friend.nhn", async ctx =>
+        {
+            await FriendsHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/initCollectMenu.nhn", async ctx =>
+        {
+            await InitCollectMenuHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/initGoku.nhn", async ctx =>
+        {
+            await InitGokuHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/updateGokuStory.nhn", async ctx =>
+        {
+            await UpdateGokuStoryHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/friendSearch.nhn", async ctx =>
+        {
+            await FriendSearchHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/friendRequest.nhn", async ctx =>
+        {
+            await FriendRequestHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/friendRequestDelete.nhn", async ctx =>
+        {
+            await FriendRequestDeleteHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/friendRequestAccept.nhn", async ctx =>
+        {
+            await FriendRequestAcceptHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/initCrystal.nhn", async ctx =>
+        {
+            await InitCrystalHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/updateGokuMenu.nhn", async ctx =>
+        {
+            await UpdateGokuMenuHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/updateCrystalMenu.nhn", async ctx =>
+        {
+            await UpdateCrystalMenuHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/friendDelete.nhn", async ctx =>
+        {
+            await FriendDeleteHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/getPresentBox.nhn", async ctx =>
+        {
+            await GetPresentBoxHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/getRanking.nhn", async ctx =>
+        {
+            await GetRankingHandler.HandleAsync(ctx);
         });
     }
 

@@ -27,6 +27,10 @@ namespace Puniemu.Src.TableParser.Logic
         }
         private List<string[]> Load(string src)
         {
+            if (string.IsNullOrEmpty(src))
+            {
+                return new List<string[]>();
+            }
             string[] rows = src.Split('*');
             List<string[]> table = new List<string[]>(rows.Length);
             for (int i = 0; i < rows.Length; i++)
@@ -136,7 +140,13 @@ namespace Puniemu.Src.TableParser.Logic
                     sb.Append('*');
                 }
             }
-            return sb.ToString();
+            // remove extra *
+            var s = sb.ToString();
+            if (s.StartsWith("*"))
+                s = s.Substring(1);
+            if (s.EndsWith("*"))
+                s = s.Substring(0, s.Length - 1);
+            return s;
         }
     }
 }

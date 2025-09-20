@@ -52,7 +52,8 @@ namespace Puniemu.Src.UserDataManager.Logic
             {
                 Gdkey = Guid.NewGuid().ToString(),
                 YwpUserTables = new(),
-                LastLoginTime = ""
+                LastLoginTime = "",
+                CharacterId = ""
             };
             //response is saved to get the generated id
             var response = await SupabaseClient!.From<Account>().Insert(acc);
@@ -86,16 +87,39 @@ namespace Puniemu.Src.UserDataManager.Logic
             var response = await SupabaseClient!.From<Account>().Where(a => a.Gdkey == gdkey).Get();
             var account = response.Models.FirstOrDefault();
             var tbl = account.YwpUserTables[tableId];
+            if (tbl == null)
+                return default;
             JToken token = JToken.FromObject(tbl);
             return token.ToObject<T>();
         }
-        public static async Task<Dictionary<string,object>> GetEntireUserData(string gdkey)
+        public static async Task<Dictionary<string,object?>> GetEntireUserData(string gdkey)
         {
             var response = await SupabaseClient!.From<Account>().Where(a => a.Gdkey == gdkey).Get();
             var account = response.Models.FirstOrDefault();
             return account.YwpUserTables;
         }
-        public static async Task SetEntireUserData(string gdkey, Dictionary<string,object> data)
+        public static async Task<string> GetGdkeyFromCharacterId(string charId)
+        {
+            var response = await SupabaseClient!.From<Account>().Where(a => a.CharacterId == charId).Get();
+
+            var account = response.Models.FirstOrDefault();
+            return account?.Gdkey ?? string.Empty;
+        }
+        public static async Task<string> GetGdkeyFromUserId(string userId)
+        {
+            var response = await SupabaseClient!.From<Account>().Where(a => a.UserId == userId).Get();
+
+            var account = response.Models.FirstOrDefault();
+            return account?.Gdkey ?? string.Empty;
+        }
+        public static async Task<string> GetLastLoginTime(string gdkey)
+        {
+            var response = await SupabaseClient!.From<Account>().Where(a => a.Gdkey == gdkey).Get();
+
+            var account = response.Models.FirstOrDefault();
+            return account?.LastLoginTime;
+        }
+        public static async Task SetEntireUserData(string gdkey, Dictionary<string,object?> data)
         {
             var response = await SupabaseClient!.From<Account>().Where(a => a.Gdkey == gdkey).Get();
             var account = response.Models.FirstOrDefault();

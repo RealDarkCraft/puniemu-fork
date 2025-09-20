@@ -19,7 +19,7 @@ namespace Puniemu.Src.Utils.GeneralUtils
             return output;
         }
 
-        public static async Task AddTablesToResponse(IEnumerable<string> tables, Dictionary<string,object> resultDictionary, bool isDownloadOnce, string gdkey = "")
+        public static async Task AddTablesToResponse(IEnumerable<string> tables, Dictionary<string,object?> resultDictionary, bool isDownloadOnce, string gdkey = "")
         {
             Dictionary<string, object>? userTables = null;
 
