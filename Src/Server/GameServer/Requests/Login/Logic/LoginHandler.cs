@@ -27,7 +27,6 @@ namespace Puniemu.Src.Server.GameServer.Requests.Login.Logic
             //Construct response
             var res = new LoginResponse();
             //Get the user tables
-            var userTables = await UserDataManager.Logic.UserDataManager.GetEntireUserData(deserialized!.Gdkey!);
             var resdict = await res.ToDictionary(deserialized!.Gdkey!);            
             await GeneralUtils.AddTablesToResponse(Consts.LOGIN_TABLES,resdict,true,deserialized!.Gdkey!);
             //Set last login time to now
