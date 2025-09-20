@@ -20,6 +20,7 @@ The project is in no way affiliated with NHN. We do not intend to infringe on th
 
 - Zura - Main dev
 - DarkCraft - Main dev
+- wibwob_yt - Dev
 - onepiecefreak3 - Reverse engineering help
 - kuronosuFear - Reverse engineering help
 - picky_x_keizen - Logo
