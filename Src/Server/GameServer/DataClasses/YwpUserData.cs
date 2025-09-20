@@ -20,6 +20,10 @@ namespace Puniemu.Src.Server.GameServer.DataClasses
         [JsonProperty("friendMaxCnt")]
         public int FriendMaxCount { get; set; }
 
+        // Not in ywp_user_data but we put it to easily get it
+        [JsonProperty("youkaiId")]
+        public long YoukaiId { get; set; }
+
         // Have no idea. Initialized to 0.
         [JsonProperty("medalPoint")]
         public int MedalPoint { get; set; }
@@ -130,12 +134,13 @@ namespace Puniemu.Src.Server.GameServer.DataClasses
 
         public YwpUserData(PlayerIcon icon, PlayerTitle title, string gdkey, string playerName)
         {
+            this.YoukaiId = 2235000;
             this.PlayerName = playerName;
             this.Birthday = "";
             this.IconID = (int)icon;
             this.CharacterTitleID = (int)title;
             this.FreeHitodama = 5;
-            this.FriendMaxCount = 0;
+            this.FriendMaxCount = 10;
             this.MedalPoint = 0;
             this.CurrentStageID = 1001001;
             this.GokuCollectCount = 0;

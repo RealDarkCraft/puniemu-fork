@@ -13,7 +13,7 @@ namespace Puniemu.Src.Server.GameServer.Logic
             bool edited = false;
             foreach (string[] elements in parser.Table)
             {
-                if (int.Parse(elements[1]) == target_tutorial_id)
+                if (int.Parse(elements[1]) == target_tutorial_id && int.Parse(elements[0]) == target_tutorial_type)
                 {
                     edited = true;
                     parser.Table[idx][0] = target_tutorial_type.ToString();
@@ -28,13 +28,13 @@ namespace Puniemu.Src.Server.GameServer.Logic
             }
             return new TableParser.Logic.TableParser(parser.ToString());
         }
-        public static int GetStatus(TableParser.Logic.TableParser parser, int target_tutorial_id)
+        public static int GetStatus(TableParser.Logic.TableParser parser, int target_tutorial_id, int target_tutorial_type)
         {
             int idx = 0;
             int status = -1;
             foreach (string[] elements in parser.Table)
             {
-                if (int.Parse(elements[1]) == target_tutorial_id)
+                if (int.Parse(elements[1]) == target_tutorial_id && int.Parse(elements[0]) == target_tutorial_type)
                 {
                     status = int.Parse(elements[2]);
                     break;
