@@ -44,7 +44,7 @@ class GamedataDownloader:
         if (override != None):
             if (debug):
                 print(f"[DEBUG] Dumping override (path='{override}')")
-            override_files = [(f, os.path.splitext(f)[0]) for f in os.listdir(dossier) if os.path.isfile(os.path.join(dossier, f))]
+            override_files = [(f, os.path.splitext(f)[0]) for f in os.listdir(dossier) if os.path.isfile(os.path.join(override, f))]
             for i in override_files:
                 self.dumped_key.append(i[1])
                 try:
