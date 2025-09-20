@@ -6,7 +6,7 @@ import requests
 from urllib.parse import urlparse
 from sharedLogic import NHN
 
-DL_SRV = "https://ywp-down.hangame.co.jp/eal"
+DL_SRV = "https://resource.yw-p.com/eal"
 use_game_structure = False
 async def download_file(session, data, download_directory):
     if use_game_structure:

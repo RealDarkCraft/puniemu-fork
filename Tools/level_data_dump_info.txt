@@ -1,0 +1,11 @@
+{"1001001": {"first_reward":[{"itemId": 0, "itemType": 4, "itemCnt": 1}],"tutorial_edit": {"requests": [{"tutorialType":1, "tutorialId":1000, "tutorialStatus":2, "firstClear":1}], "response": [{"tutorialType":1, "tutorialId":1000, "tutorialStatus":3, "firstClear":1}]}},
+"1001002": {"first_reward":[{"itemId": 0, "itemType": 4, "itemCnt": 1}],"tutorial_edit": {"requests": null, "response": [{"tutorialType":1, "tutorialId":1000, "tutorialStatus":4, "firstClear":1}]}},
+"1001003": {"first_reward":[{"itemId": 10207, "itemType": 1, "itemCnt": 1}],"tutorial_edit": {"requests": null, "response": [{"tutorialType":1, "tutorialId":1000, "tutorialStatus":5, "firstClear":1}]}},
+"1001004": {"first_reward":[{"itemId": 0, "itemType": 4, "itemCnt": 1}], "menufunc_edit":[{"id":1,"value":1}],"default_befriends": 100100401, "tutorial_edit": {"requests": null, "response": [{"tutorialType":1, "tutorialId":1000, "tutorialStatus":6, "firstClear":1},{"tutorialType":2, "tutorialId":2002, "tutorialStatus":1, "firstClear":1}]}},
+"1001005": {"first_reward":[{"itemId": 5, "itemType": 12, "itemCnt": 1}],"menufunc_edit":[{"id":2006,"value":1}], "tutorial_edit": {"requests": null, "response": [{"tutorialType":1, "tutorialId":1000, "tutorialStatus":8, "firstClear":1}]}},
+"1001006": {"first_reward":[{"itemId": 25007, "itemType": 1, "itemCnt": 1}],"menufunc_edit":[{"id":2,"value":1}, {"id":2007,"value":1}, {"id":2008,"value":1}, {"id":2009,"value":1}, {"id":2010,"value":1}], "default_befriends": 100100601},
+"1001007": {"first_reward":[{"itemId": 0, "itemType": 4, "itemCnt": 2}]},
+"1001008": {"first_reward":[{"itemId": 20502, "itemType": 1, "itemCnt": 1}],"menufunc_edit":[{"id": "4", "value": "1"}], "default_befriends": 100100801},
+"1001009": {"first_reward":[{"itemId": 0, "itemType": 4, "itemCnt": 2}]}
+}
+
