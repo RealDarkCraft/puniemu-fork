@@ -14,7 +14,7 @@ namespace Puniemu.Src.TableParser.Logic
         private Dictionary<string, List<int>> _identifierDictionary = new();
         private string? _prefix = null;
         private string? _delimiter = "|"; //Delimiter to be able to parse table that have "^" instead of "|"
-        public TableParser(string src, string prefix = "", string delimiter = "|")
+        public TableParser(string? src, string prefix = "", string delimiter = "|")
         {
             _delimiter = delimiter;
             if (prefix != "")
