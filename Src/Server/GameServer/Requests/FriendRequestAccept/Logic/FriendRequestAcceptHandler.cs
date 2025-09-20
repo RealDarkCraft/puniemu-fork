@@ -66,15 +66,15 @@ namespace Puniemu.Src.Server.GameServer.Requests.FriendRequestAccept.Logic
             var res = new FriendRequestAcceptResponse();
             var my = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<YwpUserData>(deserialized!.Level5UserID, "ywp_user_data");
             var tgdkey = await UserDataManager.Logic.UserDataManager.GetGdkeyFromUserId(deserialized!.TargetUserId);
-            var YwpUserFriendRequestRecvFriend = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendsRequestEntry>>(tgdkey, "ywp_user_friend_request_recv");
-            res.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendsRequestEntry>>(deserialized!.Level5UserID, "ywp_user_friend_request_recv");
+            var YwpUserFriendRequestRecvFriend = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendRequestEntry>>(tgdkey, "ywp_user_friend_request_recv");
+            res.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendRequestEntry>>(deserialized!.Level5UserID, "ywp_user_friend_request_recv");
             int idx = 0;
             bool found = false;
             res.YwpUserFriend = null;
             res.ResponseCode = 1;
             List<FriendEntry>? YwpUserFriendFriend = null;
             FriendEntry usr = new FriendEntry();
-            foreach (FriendsRequestEntry element in res.YwpUserFriendRequestRecv!)
+            foreach (FriendRequestEntry element in res.YwpUserFriendRequestRecv!)
             {
                 if (element.UserId!.Equals(deserialized!.TargetUserId))
                 {
@@ -133,7 +133,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.FriendRequestAccept.Logic
                     YwpUserFriendFriend.Add(me);
             }
             idx = 0;
-            foreach (FriendsRequestEntry element in YwpUserFriendRequestRecvFriend!)
+            foreach (FriendRequestEntry element in YwpUserFriendRequestRecvFriend!)
             {
                 if (element.UserId!.Equals(my!.UserID))
                 {

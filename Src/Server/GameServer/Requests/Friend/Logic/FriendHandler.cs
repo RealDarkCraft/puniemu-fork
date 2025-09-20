@@ -20,8 +20,8 @@ namespace Puniemu.Src.Server.GameServer.Requests.Friend.Logic
             var deserialized = JsonConvert.DeserializeObject<FriendsRequest>(requestJsonString!);
 
             var instance = new FriendsResponse();
-            instance.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendsRequestEntry>>(deserialized.Level5UserID!, "ywp_user_friend_request_recv");
-            foreach (FriendsRequestEntry item in instance.YwpUserFriendRequestRecv!)
+            instance.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendRequestEntry>>(deserialized.Level5UserID!, "ywp_user_friend_request_recv");
+            foreach (FriendRequestEntry item in instance.YwpUserFriendRequestRecv!)
             {
                 item.RequestDtSentence = GameServer.Logic.GenerateFriendData.GetTimeDifferenceString(item.RequestDt!);
             }

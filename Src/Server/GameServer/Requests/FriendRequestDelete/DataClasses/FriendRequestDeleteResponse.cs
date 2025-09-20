@@ -13,6 +13,6 @@ namespace Puniemu.Src.Server.GameServer.Requests.FriendRequestDelete.DataClasses
         [JsonProperty("responseCode")]
         public int ResponseCode { get; set; }
         [JsonProperty("ywp_user_friend_request_recv")]
-        public List<FriendsRequestEntry>? YwpUserFriendRequestRecv { get; set; }
+        public List<FriendRequestEntry>? YwpUserFriendRequestRecv { get; set; }
     }
 }

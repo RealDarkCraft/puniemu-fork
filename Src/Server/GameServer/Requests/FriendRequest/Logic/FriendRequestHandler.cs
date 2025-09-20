@@ -5,6 +5,7 @@ using System.Buffers;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.Eventing.Reader;
+using Puniemu.Src.Server.GameServer.DataClasses;
 
 
 namespace Puniemu.Src.Server.GameServer.Requests.FriendRequest.Logic
@@ -51,10 +52,10 @@ namespace Puniemu.Src.Server.GameServer.Requests.FriendRequest.Logic
                     }
                     else
                     {
-                        var targetFriendRequestList = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendsRequestEntry>>(targetGdkey!, "ywp_user_friend_request_recv");
-                        FriendsRequestEntry entry = new();
+                        var targetFriendRequestList = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendRequestEntry>>(targetGdkey!, "ywp_user_friend_request_recv");
+                        FriendRequestEntry entry = new();
                         int idx = 0;
-                        foreach (FriendsRequestEntry element in targetFriendRequestList!)
+                        foreach (FriendRequestEntry element in targetFriendRequestList!)
                         {
                             if (element.UserId!.Equals(myUserData.UserID))
                             {
@@ -86,8 +87,8 @@ namespace Puniemu.Src.Server.GameServer.Requests.FriendRequest.Logic
                 await ctx.Response.WriteAsync(NHNCrypt.Logic.NHNCrypt.EncryptResponse(JsonConvert.SerializeObject(errSession)));
                 return;
             }
-            res.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendsRequestEntry>>(deserialized.Level5UserID!, "ywp_user_friend_request_recv");
-            foreach (FriendsRequestEntry item in res.YwpUserFriendRequestRecv!)
+            res.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendRequestEntry>>(deserialized.Level5UserID!, "ywp_user_friend_request_recv");
+            foreach (FriendRequestEntry item in res.YwpUserFriendRequestRecv!)
             {
                 item.RequestDtSentence = GameServer.Logic.GenerateFriendData.GetTimeDifferenceString(item.RequestDt!);
             }

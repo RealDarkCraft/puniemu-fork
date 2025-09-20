@@ -99,7 +99,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.FriendDelete.Logic
             res.YwpUserFriend = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendEntry>>(myGdkey, "ywp_user_friend") ?? new List<FriendEntry>();
             res.YwpUserFriendRank = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendEntry>>(myGdkey, "ywp_user_friend_rank") ?? new List<FriendEntry>();
             res.YwpUserFriendStarRank = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendRankEntry>>(myGdkey, "ywp_user_friend_star_rank") ?? new List<FriendRankEntry>();
-            res.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendsRequestEntry>>(myGdkey, "ywp_user_friend_request_recv") ?? new List<FriendsRequestEntry>();
+            res.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendRequestEntry>>(myGdkey, "ywp_user_friend_request_recv") ?? new List<FriendRequestEntry>();
 
             res.ResponseCode = 0;
 
@@ -125,8 +125,8 @@ namespace Puniemu.Src.Server.GameServer.Requests.FriendDelete.Logic
             starRank.RemoveAll(f => f != null && f.UserId == removedUserId);
             await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(gdkey, "ywp_user_friend_star_rank", starRank);
 
-            // ywp_user_friend_request_recv (FriendsRequestEntry)
-            var recv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendsRequestEntry>>(gdkey, "ywp_user_friend_request_recv") ?? new List<FriendsRequestEntry>();
+            // ywp_user_friend_request_recv (FriendRequestEntry)
+            var recv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendRequestEntry>>(gdkey, "ywp_user_friend_request_recv") ?? new List<FriendRequestEntry>();
             recv.RemoveAll(f => f != null && f.UserId == removedUserId);
             await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(gdkey, "ywp_user_friend_request_recv", recv);
 

@@ -26,6 +26,6 @@ namespace Puniemu.Src.Server.GameServer.Requests.Friend.DataClasses
         [JsonProperty("ywp_user_friend_star_rank")]
         public List<FriendRankEntry>? YwpUserFriendStarRank { get; set; } = new();
         [JsonProperty("ywp_user_friend_request_recv")]
-        public List<FriendsRequestEntry>? YwpUserFriendRequestRecv { get; set; }
+        public List<FriendRequestEntry>? YwpUserFriendRequestRecv { get; set; }
     }
 }

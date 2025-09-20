@@ -22,10 +22,10 @@ namespace Puniemu.Src.Server.GameServer.Requests.FriendRequestDelete.Logic
             var deserialized = JsonConvert.DeserializeObject<FriendRequestDeleteRequest>(requestJsonString!);
 
             var res = new FriendRequestDeleteResponse();
-            res.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendsRequestEntry>>(deserialized!.Level5UserID, "ywp_user_friend_request_recv");
+            res.YwpUserFriendRequestRecv = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendRequestEntry>>(deserialized!.Level5UserID, "ywp_user_friend_request_recv");
             int idx = 0;
             int to_delete = -1;
-            foreach (FriendsRequestEntry element in res.YwpUserFriendRequestRecv!)
+            foreach (FriendRequestEntry element in res.YwpUserFriendRequestRecv!)
             {
                 if (element.UserId!.Equals(deserialized!.TargetUserId))
                 {
