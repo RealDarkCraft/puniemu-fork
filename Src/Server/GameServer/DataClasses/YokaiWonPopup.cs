@@ -31,7 +31,7 @@ namespace Puniemu.Src.Server.GameServer.DataClasses
 
         // idk cause was set to null in the response
         [JsonProperty("skill")]
-        public object ?skill = null;
+        public SkillResult? Skill = null;
 
         [JsonProperty("exchgYmoney")]
         public int ExchgYmoney = 0;
