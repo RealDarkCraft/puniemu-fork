@@ -54,7 +54,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.UpdateCrystalMenu.DataClasses
 
         public async Task<Dictionary<string, object>> ToDictionary(string gdkey)
         {
-            return _jo.ToObject<Dictionary<string, object>>();
+            return _jo.ToObject<Dictionary<string, object>>()!;
         }
     }
 }

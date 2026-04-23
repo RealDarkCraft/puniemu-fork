@@ -14,8 +14,8 @@ namespace Puniemu.Src.Server.GameServer.Requests.UpdateCrystalMenu.Logic
             var encRequest = Encoding.UTF8.GetString(readResult.Buffer.ToArray());
             ctx.Request.BodyReader.AdvanceTo(readResult.Buffer.End);
 
-            var requestJsonString = NHNCrypt.Logic.NHNCrypt.DecryptRequest(encRequest);
-            var deserialized = JsonConvert.DeserializeObject<UpdateCrystalMenuRequest>(requestJsonString!);
+            var requestJsonString = NHNCrypt.Logic.NHNCrypt.DecryptRequest(encRequest)!;
+            var deserialized = JsonConvert.DeserializeObject<UpdateCrystalMenuRequest>(requestJsonString)!;
 
             var res = await UpdateCrystalMenuResponse.BuildAsync(deserialized);
 

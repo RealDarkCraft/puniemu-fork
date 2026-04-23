@@ -15,8 +15,8 @@ namespace Puniemu.Src.Server.GameServer.Requests.UpdateGokuMenu.Logic
             var encRequest = Encoding.UTF8.GetString(readResult.Buffer.ToArray());
             ctx.Request.BodyReader.AdvanceTo(readResult.Buffer.End);
 
-            var requestJsonString = NHNCrypt.Logic.NHNCrypt.DecryptRequest(encRequest);
-            var deserialized = JsonConvert.DeserializeObject<UpdateGokuMenuRequest>(requestJsonString!);
+            var requestJsonString = NHNCrypt.Logic.NHNCrypt.DecryptRequest(encRequest)!;
+            var deserialized = JsonConvert.DeserializeObject<UpdateGokuMenuRequest>(requestJsonString)!;
 
             var res = await UpdateGokuMenuResponse.BuildAsync(deserialized);
 
