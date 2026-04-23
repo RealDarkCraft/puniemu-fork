@@ -8,10 +8,10 @@ namespace Puniemu.Src.UserDataManager.DataClasses
     {
         [Column("udkey")]
         [PrimaryKey("udkey",false)]
-        public string UdKey { get; set; }
+        public string? UdKey { get; set; }
 
         [Column("gdkeys")]
-        public List<string> Gdkeys { get; set; }
+        public List<string>? Gdkeys { get; set; }
 
     }
 }

@@ -37,6 +37,11 @@ using Puniemu.Src.Server.GameServer.Requests.InitCrystal.Logic;
 using Puniemu.Src.Server.GameServer.Requests.UpdateCrystalMenu.Logic;
 using Puniemu.Src.Server.GameServer.Requests.FriendDelete.Logic;
 using Puniemu.Src.Server.GameServer.Requests.GetPresentBox.Logic;
+using Puniemu.Src.Server.GameServer.Requests.GameEndScoreAttack.Logic;
+using Puniemu.Src.Server.GameServer.Requests.InitScoreAttack.Logic;
+using Puniemu.Src.Server.GameServer.Requests.StartScoreAttack.Logic;
+using Puniemu.Src.Server.GameServer.Requests.MapWarp.Logic;
+using Puniemu.Src.Server.GameServer.Requests.MapUnLock.Logic;
 
 
 using Puniemu.Src.Utils.GeneralUtils;
@@ -236,6 +241,26 @@ class Program
         app.MapPost("/getRanking.nhn", async ctx =>
         {
             await GetRankingHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/mapWarp.nhn", async ctx =>
+        {
+            await MapWarpHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/gameStartScoreAttack.nhn", async ctx =>
+        {
+            await StartScoreAttackHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/gameEndScoreAttack.nhn", async ctx =>
+        {
+            await GameEndScoreAttackHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/initScoreAttack.nhn", async ctx =>
+        {
+            await InitScoreAttackHandler.HandleAsync(ctx);
+        });
+        app.MapPost("/mapUnLock.nhn", async ctx =>
+        {
+            await MapUnLockHandler.HandleAsync(ctx);
         });
     }
 
