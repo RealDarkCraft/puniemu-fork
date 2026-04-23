@@ -61,5 +61,8 @@ namespace Puniemu.Src.Server.GameServer.DataClasses
         // tutorial edition
         [JsonProperty("tutorial_edit")]
         public TutorialEntryRespRes ?TutorialEdit { get; set; }
+
+        [JsonProperty("locked_stage")]
+        public List<LockedStageResultList?>? LockedStage {  get; set; }
     }
 }

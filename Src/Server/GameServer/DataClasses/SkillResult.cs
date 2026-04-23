@@ -4,7 +4,7 @@ namespace Puniemu.Src.Server.GameServer.DataClasses
 {
     public class SkillResult
     {
-        // Max level flg
+        // Max level flg, iirc it's 7
         [JsonProperty("isMaxLevel")]
         public bool isMaxLevel = false;
         // old yokai info

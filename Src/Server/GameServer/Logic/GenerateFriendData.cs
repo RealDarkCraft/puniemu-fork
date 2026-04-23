@@ -60,7 +60,7 @@ namespace Puniemu.Src.Server.GameServer.Logic
         public static async void RefreshYwpUserFriend(string gdkey, int TitleId, int IconId, string PlayerName, long YoukaiId, string LastPlayDt)
         {
             // update friends list
-            var me = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<YwpUserData>(gdkey, "ywp_user_data");
+            var me = (await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<YwpUserData>(gdkey, "ywp_user_data"))!;
             var myFriendList = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<List<FriendEntry>>(gdkey, "ywp_user_friend");
             foreach (FriendEntry item in myFriendList!)
             {

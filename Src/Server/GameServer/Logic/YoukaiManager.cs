@@ -1,36 +1,17 @@
 ﻿using Newtonsoft.Json;
 using Puniemu.Src.Server.GameServer.DataClasses;
 using Puniemu.Src.Server.GameServer.Requests.InitGacha.DataClasses;
+using Puniemu.Src.TableParser.DataClasses;
+using Puniemu.Src.TableParser.Logic;
 using System.Buffers;
 using System.IO;
+using System.Numerics;
 using System.Text;
 
 namespace Puniemu.Src.Server.GameServer.Logic
 {
     public class YoukaiManager
     {
-        public static TableParser.Logic.TableParser AddYoukai(TableParser.Logic.TableParser youkaiList, long YoukaiId)
-        {
-            var YoukaiMstTable = new TableParser.Logic.TableParser(JsonConvert.DeserializeObject<Dictionary<string, string>>(DataManager.Logic.DataManager.GameDataManager!.GamedataCache["ywp_mst_youkai"]!)!["tableData"]);
-            var YoukaiLevelMstTable = new TableParser.Logic.TableParser(JsonConvert.DeserializeObject<Dictionary<string, string>>(DataManager.Logic.DataManager.GameDataManager.GamedataCache["ywp_mst_youkai_level"]!)!["tableData"]);
-            var UserYoukaiIndex = youkaiList.FindIndex([YoukaiId.ToString()]);
-            var MstYoukaiIndex = YoukaiMstTable.FindIndex([YoukaiId.ToString()]);
-            if (UserYoukaiIndex == -1)
-            {
-                // add new youkai
-                var tmpIdx = 0;
-                var levelType = int.Parse(YoukaiMstTable.Table[MstYoukaiIndex][5]);
-                foreach (string[] str in YoukaiLevelMstTable.Table)
-                {
-                    if (str[0] == levelType.ToString() && str[1] == "1")
-                        break;
-                    tmpIdx++;
-                }
-                // set Youkai id, level, total exp, hp, attack power, exp limit (for this level), exp (for this level), percentage of exp limit and exp (for this level), actual date, unk (maybe paid level)
-                youkaiList.AddRow([YoukaiId.ToString(), "1", "0", YoukaiMstTable.Table[MstYoukaiIndex][8], YoukaiMstTable.Table[MstYoukaiIndex][10], YoukaiLevelMstTable.Table[tmpIdx][3], "0", "0", "0", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString(), "0"]);
-            }
-            return new TableParser.Logic.TableParser(youkaiList.ToString());
-        }
         static int SoulLevelFormula(int n)
         {
             if (n == 0)
@@ -57,34 +38,80 @@ namespace Puniemu.Src.Server.GameServer.Logic
             }
             return points;
         }
-        public static TableParser.Logic.TableParser AddYoukaiSkill(TableParser.Logic.TableParser youkaiList, long YoukaiId)
+
+        public static void AddYoukai(ref TableParser<YwpUserYoukai> parser, long YoukaiId, ref TableParser<YwpUserYoukaiSkill> parser2)
         {
-            var UserYoukaiIndex = youkaiList.FindIndex([YoukaiId.ToString()]);
+            var YoukaiMstTable = new TableParser.Logic.TableParser(JsonConvert.DeserializeObject<Dictionary<string, string>>(DataManager.Logic.DataManager.GameDataManager!.GamedataCache["ywp_mst_youkai"]!)!["tableData"]);
+            var YoukaiLevelMstTable = new TableParser.Logic.TableParser(JsonConvert.DeserializeObject<Dictionary<string, string>>(DataManager.Logic.DataManager.GameDataManager.GamedataCache["ywp_mst_youkai_level"]!)!["tableData"]);
+            var UserYoukaiIndex = GetYoukaiIndex(ref parser, YoukaiId);
+            var MstYoukaiIndex = YoukaiMstTable.FindIndex([YoukaiId.ToString()]);
             if (UserYoukaiIndex == -1)
             {
-                youkaiList.AddRow([YoukaiId.ToString(), "1", "0", "1000", "0", "0"]);
-            }
-            else
-            {
-                int amuLevel = int.Parse(youkaiList.Table[UserYoukaiIndex][1]);
-                if (amuLevel >= 7)
+                // add new youkai
+                var tmpIdx = 0;
+                var levelType = int.Parse(YoukaiMstTable.Table[MstYoukaiIndex][5]);
+                foreach (string[] str in YoukaiLevelMstTable.Table)
                 {
-                    return new TableParser.Logic.TableParser(youkaiList.ToString());
+                    if (str[0] == levelType.ToString() && str[1] == "1")
+                        break;
+                    tmpIdx++;
                 }
-                int current_points = int.Parse(youkaiList.Table[UserYoukaiIndex][2]);
-                int new_points = 1000 + current_points;
-                int new_level = SoulLevel(new_points);
-
-                int denominator = SoulLevelFormula(new_level);
-                int numerator = new_points - SoulPoints(new_level - 1);
-                int percentage = (int)(((double)numerator / (double)denominator) * 100);
-                youkaiList.Table[UserYoukaiIndex][1] = new_level.ToString();
-                youkaiList.Table[UserYoukaiIndex][2] = new_points.ToString();
-                youkaiList.Table[UserYoukaiIndex][3] = denominator.ToString();
-                youkaiList.Table[UserYoukaiIndex][4] = numerator.ToString();
-                youkaiList.Table[UserYoukaiIndex][5] = percentage.ToString();
+                parser.AddItem(new YwpUserYoukai { YoukaiId = YoukaiId, Level = 1, Exp = 0, Hp =  int.Parse(YoukaiMstTable.Table[MstYoukaiIndex][8]), Atk = int.Parse(YoukaiMstTable.Table[MstYoukaiIndex][10]), ExpDenominator = int.Parse(YoukaiLevelMstTable.Table[tmpIdx][3]), ExpNumerator = 0, Percentage = 0, BefriendDate = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), BreakLimitCount = 0 });
             }
-            return new TableParser.Logic.TableParser(youkaiList.ToString());
+            YoukaiManager.AddYoukaiSkill(ref parser2, YoukaiId);
+            return;
+        }
+        public static void AddYoukaiSkill(ref TableParser<YwpUserYoukaiSkill> youkaiList, long YoukaiId)
+        {
+            var UserYoukaiIndex = GetYoukaiSkillIndex(ref youkaiList, YoukaiId);
+            if (UserYoukaiIndex == -1)
+            {
+                youkaiList.AddItem(new YwpUserYoukaiSkill { YoukaiId = YoukaiId, Level = 1, Points = 0, PercentageDenominator = 1000, PercentageNumerator = 0, Percentage = 0 });
+                return;
+            }
+            int amuLevel = youkaiList.Items[UserYoukaiIndex].Level;
+            if (amuLevel >= 7)
+            {
+                return;
+            }
+            int current_points = youkaiList.Items[UserYoukaiIndex].Points;
+            int new_points = 1000 + current_points;
+            int new_level = SoulLevel(new_points);
+
+            int denominator = SoulLevelFormula(new_level);
+            int numerator = new_points - SoulPoints(new_level - 1);
+            int percentage = (int)(((double)numerator / (double)denominator) * 100);
+            youkaiList.Items[UserYoukaiIndex].Level = new_level;
+            youkaiList.Items[UserYoukaiIndex].Points = new_points;
+            youkaiList.Items[UserYoukaiIndex].PercentageDenominator = denominator;
+            youkaiList.Items[UserYoukaiIndex].PercentageNumerator = numerator;
+            youkaiList.Items[UserYoukaiIndex].Percentage = percentage;
+        }
+        public static int GetYoukaiSkillIndex(ref TableParser<YwpUserYoukaiSkill> parser, long YoukaiId)
+        {
+            uint count = 0;
+            foreach (YwpUserYoukaiSkill i in parser.Items)
+            {
+                if (i.YoukaiId == YoukaiId)
+                {
+                    return (int)count;
+                }
+                count += 1;
+            }
+            return -1;
+        }
+        public static int GetYoukaiIndex(ref TableParser<YwpUserYoukai> parser, long YoukaiId)
+        {
+            uint count = 0;
+            foreach (YwpUserYoukai i in parser.Items)
+            {
+                if (i.YoukaiId == YoukaiId)
+                {
+                    return (int)count;
+                }
+                count += 1;
+            }
+            return -1;
         }
     }
 }

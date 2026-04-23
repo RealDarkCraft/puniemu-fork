@@ -6,18 +6,18 @@ namespace Puniemu.Src.Server.GameServer.DataClasses
     {
         // stage id
         [JsonProperty("stageId")]
-        public long StageId = 0L;
+        public long StageId {  get; set; }
         // idk
         [JsonProperty("title")]
-        public string Title = string.Empty;
+        public string? Title { get; set; }
         // idk
         [JsonProperty("conditionType")]
-        public int ConditionType = 0;
+        public int ConditionType { get; set; }
         // idk
         [JsonProperty("description")]
-        public string Description = string.Empty;
+        public string? Description { get; set; }
         // idk
         [JsonProperty("originStageId")]
-        public long OriginStageId = 0L;
+        public long OriginStageId { get; set; }
     }
 }
