@@ -25,11 +25,11 @@
             GameVersion = config["GameVersion"];
             ServerName = config["ServerName"];
             //now check if the data download link is 0. if it is, it means we will draw the data download files from supabase storage
-            if (int.TryParse(config["DataDownloadSource"], out int result) && result == 0)
+            if (int.TryParse(config["DataDownloadURL"], out int result) && result == 0)
             {
                 IsDataDownloadFromSupabase = true;
             }
-            else DataDownloadURL = config["DataDownloadSource"];
+            else DataDownloadURL = config["DataDownloadURL"];
         }
     }
 }

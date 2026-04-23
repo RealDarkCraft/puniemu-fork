@@ -5,6 +5,8 @@ using Puniemu.Src.Server.GameServer.Requests.Rename.DataClasses;
 using Puniemu.Src.Server.GameServer.DataClasses;
 using System.Text;
 using System.Buffers;
+using Puniemu.Src.Server.GameServer.Logic;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Puniemu.Src.Server.GameServer.Requests.Rename.Logic
 {
@@ -22,15 +24,16 @@ namespace Puniemu.Src.Server.GameServer.Requests.Rename.Logic
             ctx.Response.ContentType = "application/json";
             var userData = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<YwpUserData>(deserialized.Level5UserID, "ywp_user_data");
 
-            if (userData != null)
+            if (userData != null && !deserialized.NewPlayerName.IsNullOrEmpty())
             {
                 userData.PlayerName = deserialized.NewPlayerName;
             }
-            await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized.Level5UserID, "ywp_user_data", userData);
+            GenerateFriendData.RefreshYwpUserFriend(deserialized.Level5UserID, -1,-1, userData!.PlayerName, -1, "");
             var renameResponse = new RenameResponse(userData!);
             var marshalledResponse = JsonConvert.SerializeObject(renameResponse);
             var encryptedResponse = NHNCrypt.Logic.NHNCrypt.EncryptResponse(marshalledResponse);
             await ctx.Response.WriteAsync(encryptedResponse);
+            await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized.Level5UserID, "ywp_user_data", userData);
         }
     }
 }

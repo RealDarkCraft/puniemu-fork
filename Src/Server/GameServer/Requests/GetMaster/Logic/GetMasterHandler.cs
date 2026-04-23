@@ -75,6 +75,9 @@ namespace Puniemu.Src.Server.GameServer.Requests.GetMaster.Logic
                 {
                     var selectedJsonUnmarshalled = UnmarshalOrGetFromCache(tblName, DataManager.Logic.DataManager.GameDataManager.GamedataCache[tblName]);
                     MasterDataJson[tblName] = selectedJsonUnmarshalled;
+                } else
+                {
+                    Console.WriteLine("warn not foudn : " + tblName);
                 }
             }
             var outResponse = NHNCrypt.Logic.NHNCrypt.EncryptResponse(JsonConvert.SerializeObject(MasterDataJson));

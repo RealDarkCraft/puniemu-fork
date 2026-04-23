@@ -5,6 +5,7 @@ using Puniemu.Src.Server.GameServer.Requests.UpdateProfile.DataClasses;
 using Puniemu.Src.Server.GameServer.DataClasses;
 using System.Text;
 using System.Buffers;
+using Puniemu.Src.Server.GameServer.Logic;
 
 namespace Puniemu.Src.Server.GameServer.Requests.UpdateProfile.Logic
 {
@@ -20,7 +21,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.UpdateProfile.Logic
             var requestJsonString = NHNCrypt.Logic.NHNCrypt.DecryptRequest(encRequest);
             var deserialized = JsonConvert.DeserializeObject<UpdateProfileRequest>(requestJsonString!);
             ctx.Response.ContentType = "application/json";
-            var userData = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<YwpUserData>(deserialized.Level5UserID, "ywp_user_data");
+            YwpUserData userData = (await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<YwpUserData>(deserialized.Level5UserID, "ywp_user_data"))!;
 
             // Unlocked Icons and Ttiles
             var userPlayerIcon = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(deserialized.Level5UserID, "ywp_user_player_icon");
@@ -50,12 +51,12 @@ namespace Puniemu.Src.Server.GameServer.Requests.UpdateProfile.Logic
             {
                 userData!.PlateID = deserialized.PlateID;
             }
-            
             await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized.Level5UserID, "ywp_user_data", userData);
             var updateProfileResponse = new UpdateProfileResponse(userPlayerIcon!, userPlayerTitle!, userPlayerPlate!, userPlayerEffect!, userPlayerCodename!,  userData!);
             var marshalledResponse = JsonConvert.SerializeObject(updateProfileResponse);
             var encryptedResponse = NHNCrypt.Logic.NHNCrypt.EncryptResponse(marshalledResponse);
             await ctx.Response.WriteAsync(encryptedResponse);
+            GenerateFriendData.RefreshYwpUserFriend(deserialized.Level5UserID, userData.CharacterTitleID, userData.IconID, "", -1, "");
         }
     }
 }

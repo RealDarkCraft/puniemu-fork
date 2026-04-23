@@ -38,7 +38,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.UserStageRanking.Logic
             // if requested stage id wasn't found we add it to ywp_user_stage_rank
             if (newList.Count == 0)
             {
-                Dictionary<string,object> newDict = new Dictionary<string,object>();
+                Dictionary<string,object?> newDict = new Dictionary<string,object?>();
                 newDict["list"] = new List<object>();
                 newDict["stageId"] = deserialized.StageID;
                 newList.Add(newDict);

@@ -26,6 +26,14 @@ namespace Puniemu.Src.Server.GameServer.Requests.Login.DataClasses
         [JsonProperty("responseCodeTeamEvent")] 
         public int ResponseCodeTeamEvent = int.Parse(DataManager.Logic.DataManager.GameDataManager.GamedataCache["responseCodeTeamEvent"]);
 
+        [JsonProperty("openingTutorialFlg")]
+        public int OpeningTutorialFlg = 2;
+
+        [JsonProperty("requireAgeConfirm")]
+        public int RequireAgeConfirm = 2;
+
+        
+
 
         public LoginResponse()
         {

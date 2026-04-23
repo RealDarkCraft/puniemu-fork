@@ -2,46 +2,45 @@
 using Puniemu.Src.Server.GameServer.Requests.InitGacha.DataClasses;
 using System.Buffers;
 using System.Text;
+using Puniemu.Src.TableParser.DataClasses;
+using Puniemu.Src.TableParser.Logic;
 
 namespace Puniemu.Src.Server.GameServer.Logic
 {
     public class TutorialFlagManager
     {
-        public static TableParser.Logic.TableParser EditTutorialFlg(TableParser.Logic.TableParser parser, int target_tutorial_type, int target_tutorial_id, int target_tutorital_value)
+        public static void EditTutorialFlg(ref TableParser<YwpUserTutorialList> parser, int TutorialType, int TutorialId, int TutorialValue)
         {
-            int idx = 0;
-            bool edited = false;
-            foreach (string[] elements in parser.Table)
+            int index = GetTutorialFlgIndex(ref parser, TutorialId, TutorialType);
+            if (index == -1)
             {
-                if (int.Parse(elements[1]) == target_tutorial_id)
-                {
-                    edited = true;
-                    parser.Table[idx][0] = target_tutorial_type.ToString();
-                    parser.Table[idx][2] = target_tutorital_value.ToString();
-                    break;
-                }
-                idx += 1;
+                parser.AddItem(new YwpUserTutorialList { TutorialId = TutorialId, TutorialType = TutorialType, TutorialValue = TutorialValue });
+                return;
             }
-            if (edited == false)
-            {
-                parser.AddRow([target_tutorial_type.ToString(), target_tutorial_id.ToString(), target_tutorital_value.ToString()]);
-            }
-            return new TableParser.Logic.TableParser(parser.ToString());
+            parser.Items[index].TutorialValue = TutorialValue;
+            parser.Items[index].TutorialType = TutorialType;
         }
-        public static int GetStatus(TableParser.Logic.TableParser parser, int target_tutorial_id)
+        public static int GetTutorialFlgIndex(ref TableParser<YwpUserTutorialList> parser, int TutorialId, int TutorialType)
         {
-            int idx = 0;
-            int status = -1;
-            foreach (string[] elements in parser.Table)
+            uint count = 0;
+            foreach (YwpUserTutorialList i in parser.Items)
             {
-                if (int.Parse(elements[1]) == target_tutorial_id)
+                if (i.TutorialId == TutorialId && i.TutorialType == TutorialType)
                 {
-                    status = int.Parse(elements[2]);
-                    break;
+                    return (int)count;
                 }
-                idx += 1;
+                count += 1;
             }
-            return status;
+            return -1;
+        }
+        public static int GetStatus(ref TableParser<YwpUserTutorialList> parser, int TutorialId, int TutorialType)
+        {
+            int index = GetTutorialFlgIndex(ref parser, TutorialId, TutorialType);
+            if (index == -1)
+            {
+                return -1;
+            }
+            return parser.Items[index].TutorialValue;
         }
     }
 }

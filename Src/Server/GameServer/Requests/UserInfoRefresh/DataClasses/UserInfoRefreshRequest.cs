@@ -9,7 +9,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.UserInfoRefresh.DataClasses
         public string AppVer { get; set; }
 
         // Equivalent to UDKey
-        [JsonProperty("deviceID")]
+        [JsonProperty("deviceId")]
         public string DeviceID { get; set; }
 
         // ID of the user title
@@ -17,7 +17,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.UserInfoRefresh.DataClasses
         public List<string> RequestedTab { get; set; }
 
         // Interchangeable with gdkey
-        [JsonProperty("level5UserID")]
+        [JsonProperty("level5UserId")]
         public string Level5UserID { get; set; }
 
         // Version of server data
@@ -29,7 +29,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.UserInfoRefresh.DataClasses
         public int OsType { get; set; }
 
         // Always 0 here
-        [JsonProperty("userID")]
+        [JsonProperty("userId")]
         public string UserID { get; set; }
 
         // Always 0

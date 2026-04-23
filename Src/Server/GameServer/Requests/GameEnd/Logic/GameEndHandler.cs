@@ -52,7 +52,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.GameEnd.Logic
                 await GeneralUtils.SendBadRequest(ctx);
                 return;
             }
-
+            int newStarsCnt = 0;
             var youkaiDiff = new TableParser.Logic.TableParser("");
             var dictionaryDiff = new TableParser.Logic.TableParser("");
             var res = new GameEndResponse();
@@ -139,6 +139,8 @@ namespace Puniemu.Src.Server.GameServer.Requests.GameEnd.Logic
             {
                 if (starGetFlg[index] == 1 || starGetFlg[index] == 2)
                 {
+                    if (starGetFlg[index] == 1)
+                        newStarsCnt += 1;
                     if (index == 0)
                     {
                         res.UserGameResultData.StarGetFlg1 = starGetFlg[index];
@@ -414,13 +416,14 @@ namespace Puniemu.Src.Server.GameServer.Requests.GameEnd.Logic
             {
                 youkaiDiffStr = youkaiDiffStr.Substring(1);
             }
-            resdict["ywp_user_youkai_diff"] = youkaiDiffStr;
-            resdict["ywp_user_dictionary_diff"] = dictionaryDiffStr;
+            resdict["ywp_user_youkai"] = userYoukaiTable.ToString();
+            resdict["ywp_user_dictionary"] = dictionaryYoukaiTable.ToString();
 
             await GeneralUtils.AddTablesToResponse(Consts.GAME_END_TABLES, resdict!, true, deserialized!.Gdkey!);
             var encryptedRes = NHNCrypt.Logic.NHNCrypt.EncryptResponse(JsonConvert.SerializeObject(resdict));
             ctx.Response.Headers.ContentType = "application/json";
             await ctx.Response.WriteAsync(encryptedRes);
+            GenerateFriendData.RefreshYwpUserFriendRank(deserialized.Gdkey!, newStarsCnt, 0);
         }
     }
 }

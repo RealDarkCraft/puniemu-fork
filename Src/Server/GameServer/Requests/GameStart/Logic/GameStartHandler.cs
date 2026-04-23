@@ -195,7 +195,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.GameStart.Logic
                 res.DictionaryDiff = dictionaryTable.ToString();
                 await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Gdkey!, "ywp_user_requestid", res.RequestID);
                 res.UserData = userData;
-                var resdict = JsonConvert.DeserializeObject<Dictionary<string,object>>(JsonConvert.SerializeObject(res));
+                var resdict = JsonConvert.DeserializeObject<Dictionary<string,object?>>(JsonConvert.SerializeObject(res));
                 await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Gdkey!, "ywp_user_data", userData);
                 await GeneralUtils.AddTablesToResponse(Consts.GAME_START_TABLES, resdict!, true, deserialized!.Gdkey!);
                 var encryptedRes = NHNCrypt.Logic.NHNCrypt.EncryptResponse(JsonConvert.SerializeObject(resdict));
@@ -207,8 +207,6 @@ namespace Puniemu.Src.Server.GameServer.Requests.GameStart.Logic
                 var res = new MsgBoxResponse("You don't have enough spirit.", "Not Enough spirit");
                 await ctx.Response.WriteAsync(NHNCrypt.Logic.NHNCrypt.EncryptResponse(JsonConvert.SerializeObject(res)));
             }
-
-
         }
     }
 }

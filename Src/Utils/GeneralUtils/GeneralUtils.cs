@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq.Expressions;
 
 namespace Puniemu.Src.Utils.GeneralUtils
 {
@@ -19,13 +20,13 @@ namespace Puniemu.Src.Utils.GeneralUtils
             return output;
         }
 
-        public static async Task AddTablesToResponse(IEnumerable<string> tables, Dictionary<string,object> resultDictionary, bool isDownloadOnce, string gdkey = "")
+        public static async Task AddTablesToResponse(IEnumerable<string> tables, Dictionary<string,object?> resultDictionary, bool isDownloadOnce, string gdkey = "")
         {
             Dictionary<string, object>? userTables = null;
 
             if(isDownloadOnce && gdkey != string.Empty)
             {
-                userTables = await UserDataManager.Logic.UserDataManager.GetEntireUserData(gdkey);
+                userTables = (await UserDataManager.Logic.UserDataManager.GetEntireUserData(gdkey))!;
             }
             foreach(var table in tables)
             {
@@ -54,7 +55,8 @@ namespace Puniemu.Src.Utils.GeneralUtils
                         tableObj = JsonConvert.DeserializeObject<object>(tableText);
                         try
                         {
-                            var dict = (Dictionary<string, object>)tableObj!;
+                            var dict = ((JObject)tableObj!).ToObject<Dictionary<string, object>>()!;
+
                             if (dict!.ContainsKey("data"))
                             {
                                 tableObj = dict["data"];

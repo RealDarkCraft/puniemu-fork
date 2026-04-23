@@ -1,12 +1,13 @@
 using Newtonsoft.Json;
-using Puniemu.Src.UserDataManager;
-
-using Puniemu.Src.Server.GameServer.Requests.LoginStamp.DataClasses;
 using Puniemu.Src.Server.GameServer.DataClasses;
-using System.Text;
-using System.Buffers;
-using Puniemu.Src.Utils.GeneralUtils;
 using Puniemu.Src.Server.GameServer.Logic;
+using Puniemu.Src.Server.GameServer.Requests.LoginStamp.DataClasses;
+using Puniemu.Src.TableParser.DataClasses;
+using Puniemu.Src.TableParser.Logic;
+using Puniemu.Src.UserDataManager;
+using Puniemu.Src.Utils.GeneralUtils;
+using System.Buffers;
+using System.Text;
 
 namespace Puniemu.Src.Server.GameServer.Requests.LoginStamp.Logic
 {
@@ -30,7 +31,8 @@ namespace Puniemu.Src.Server.GameServer.Requests.LoginStamp.Logic
             // used to define variable
             var playerIconTable = new TableParser.Logic.TableParser("");
             var itmesListTable = new TableParser.Logic.TableParser("");
-            var userYoukaiTable = new TableParser.Logic.TableParser("");
+            var userYoukaiTable = new TableParser<YwpUserYoukai>(await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(deserialized!.Level5UserID!, "ywp_user_youkai")!);
+            var userYoukaiSkillTable = new TableParser<YwpUserYoukaiSkill>(await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(deserialized!.Level5UserID!, "ywp_user_youkai_skill")!);
             var dictionaryYoukaiTable = new TableParser.Logic.TableParser("");
 
 
@@ -66,7 +68,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.LoginStamp.Logic
             // change stamp if stamp finished
             foreach (string[] elements in LoginStamp.Table)
             {
-                if (int.Parse(elements[0]) == StampId && daysSinceEpoch2 > long.Parse(LoginUserStampTable.Table[0][0]) && (day + 1) > int.Parse(elements[2]))
+                if (int.Parse(elements[0]) == StampId && daysSinceEpoch2 > (long.Parse(LoginUserStampTable.Table[0][0]) + 8400) && (day + 1) > int.Parse(elements[2]))
                 {
                     StampId = random.Next(1, LoginStamLenght);
                     walk = 1;
@@ -80,7 +82,7 @@ namespace Puniemu.Src.Server.GameServer.Requests.LoginStamp.Logic
             }
 
             // update day
-            if (daysSinceEpoch2 > long.Parse(LoginUserStampTable.Table[0][0]))
+            if (daysSinceEpoch2 > (long.Parse(LoginUserStampTable.Table[0][0]) + 86400))
             {
                 walk = 1;
                 LoginUserStampTable.Table[0][0] = daysSinceEpoch2.ToString();
@@ -151,10 +153,8 @@ namespace Puniemu.Src.Server.GameServer.Requests.LoginStamp.Logic
                 if (current_item_type == 2)
                 {
                     var dictionaryYoukai = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(deserialized!.Level5UserID!, "ywp_user_dictionary");
-                    var userYoukai = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(deserialized!.Level5UserID!, "ywp_user_youkai");
-
                     dictionaryYoukaiTable = DictionaryManager.EditDictionary(new TableParser.Logic.TableParser(dictionaryYoukai!), current_item_id, false, true);
-                    userYoukaiTable = YoukaiManager.AddYoukai(new TableParser.Logic.TableParser(userYoukai!), current_item_id);
+                    YoukaiManager.AddYoukai(ref userYoukaiTable, current_item_id, ref userYoukaiSkillTable);
 
 
                     res.YoukaiPopupResult = new();
@@ -176,8 +176,10 @@ namespace Puniemu.Src.Server.GameServer.Requests.LoginStamp.Logic
                     res.YoukaiPopupResult.ReleaseLevelType = 0; //IDK TODO
                     await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Level5UserID!, "ywp_user_dictionary", dictionaryYoukaiTable.ToString());
                     await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Level5UserID!, "ywp_user_youkai", userYoukaiTable.ToString());
+                    await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Level5UserID!, "ywp_user_youkai_skill", userYoukaiSkillTable!.ToString());
                     LOGIN_STAMP_TABLES.Add("ywp_user_youkai");
                     LOGIN_STAMP_TABLES.Add("ywp_user_dictionary");
+                    LOGIN_STAMP_TABLES.Add("ywp_user_youkai_skill");
                 }
                 if (current_item_type == 3)
                 {
