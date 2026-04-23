@@ -5,6 +5,8 @@ using Puniemu.Src.Server.GameServer.Logic;
 using Puniemu.Src.Server.GameServer.Requests.DeckEdit.DataClasses;
 using System;
 using System.Buffers;
+using Puniemu.Src.TableParser.Logic;
+using Puniemu.Src.TableParser.DataClasses;
 using System.Text;
 namespace Puniemu.Src.Server.GameServer.Requests.DeckEdit.Logic
 {
@@ -22,15 +24,15 @@ namespace Puniemu.Src.Server.GameServer.Requests.DeckEdit.Logic
 
             // tutorial handling
             var tutorialList = await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(deserialized!.Gdkey!, "ywp_user_tutorial_list");
-            var tutorialListTable = new TableParser.Logic.TableParser(tutorialList!);
+            var tutorialListTable = new TableParser.Logic.TableParser<YwpUserTutorialList>(tutorialList!);
 
-            if (TutorialFlagManager.GetStatus(tutorialListTable, 1000, 1) == 6)
+            if (TutorialFlagManager.GetStatus(ref tutorialListTable, 1000, 1) == 6)
             {
-                tutorialListTable = TutorialFlagManager.EditTutorialFlg(tutorialListTable, 1, 1000, 7);
+                TutorialFlagManager.EditTutorialFlg(ref tutorialListTable, 1, 1000, 7);
             }
-            if (TutorialFlagManager.GetStatus(tutorialListTable, 1, 2) == 0)
+            if (TutorialFlagManager.GetStatus(ref tutorialListTable, 1, 2) == 0)
             {
-                tutorialListTable = TutorialFlagManager.EditTutorialFlg(tutorialListTable, 2, 1, 1);
+                TutorialFlagManager.EditTutorialFlg(ref tutorialListTable, 2, 1, 1);
             }
 
             // Get Watch Id
@@ -41,21 +43,20 @@ namespace Puniemu.Src.Server.GameServer.Requests.DeckEdit.Logic
             var resdict = await res.ToDictionary();
 
             // Get and edit deck data
-            var UserDeck = new TableParser.Logic.TableParser((await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(deserialized!.Gdkey!, "ywp_user_youkai_deck"))!);
+            var UserDeck = new TableParser<YwpUserDeck>((await UserDataManager.Logic.UserDataManager.GetYwpUserAsync<string>(deserialized!.Gdkey!, "ywp_user_youkai_deck"))!);
 
-            var Counter = 0;
-            foreach (var item in deserialized!.YoukaiIdList!) {
-                Counter += 1;
-                var Id = item["youkaiId"].ToString();
-                UserDeck.Table[0][Counter] = Id;
-            }
+            UserDeck.Items[0].MiddleYoukaiId = deserialized!.YoukaiIdList![0]["youkaiId"];
+            UserDeck.Items[0].FarLeftYoukaiId = deserialized!.YoukaiIdList![1]["youkaiId"];
+            UserDeck.Items[0].LeftYoukaiId = deserialized!.YoukaiIdList![2]["youkaiId"];
+            UserDeck.Items[0].RightYoukaiId = deserialized!.YoukaiIdList![3]["youkaiId"];
+            UserDeck.Items[0].FarRightYoukaiId = deserialized!.YoukaiIdList![4]["youkaiId"];
 
             await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Gdkey!, "ywp_user_youkai_deck", UserDeck.ToString());
 
             resdict["ywp_user_youkai_deck"] = UserDeck.ToString();
             await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Gdkey!, "ywp_user_tutorial_list", tutorialListTable.ToString());
             resdict["ywp_user_tutorial_list"] = tutorialListTable.ToString();
-            userData!.YoukaiId = long.Parse(UserDeck.Table[0][1]);
+            userData!.YoukaiId = UserDeck.Items[0].MiddleYoukaiId;
             await UserDataManager.Logic.UserDataManager.SetYwpUserAsync(deserialized!.Gdkey!, "ywp_user_data", userData);
             resdict["ywp_user_data"] = userData;
             foreach (var table in Consts.DECK_EDIT_TABLES)

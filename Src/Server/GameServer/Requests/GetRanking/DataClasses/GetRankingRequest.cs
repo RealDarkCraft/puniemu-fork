@@ -5,17 +5,17 @@ namespace Puniemu.Src.Server.GameServer.Requests.GetRanking.DataClasses
     public class GetRankingRequest
     {
         [JsonProperty("appVer")]
-        public string AppVer { get; set; }
+        public string? AppVer { get; set; }
 
         [JsonProperty("deviceId")]
-        public string DeviceId { get; set; }
+        public string? DeviceId { get; set; }
 
         // gdkey (level5 user id) -- correspond à "level5UserId" dans tes exemples
         [JsonProperty("level5UserId")]
-        public string Level5UserId { get; set; }
+        public string? Level5UserId { get; set; }
 
         [JsonProperty("userId")]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 
         [JsonProperty("rankType")]
         public int RankType { get; set; }
@@ -33,10 +33,10 @@ namespace Puniemu.Src.Server.GameServer.Requests.GetRanking.DataClasses
         public int OsType { get; set; }
 
         [JsonProperty("token")]
-        public string Token { get; set; }
+        public string? Token { get; set; }
 
         [JsonProperty("ywpToken")]
-        public string YwpToken { get; set; }
+        public string? YwpToken { get; set; }
 
         // some requests include extra fields like activeDeckId, stageNo, score... keep them optional if present
         [JsonProperty("activeDeckId")]
