@@ -4,6 +4,7 @@ using System.Text;
 namespace Puniemu.Src.TableParser.DataClasses
 {
     // ywp_user_youkai table definition
+    // value in them end with \, cause some value as 'GeneralStringValue1' store raw sub table
 
     public class YwpUserEvent
     {
