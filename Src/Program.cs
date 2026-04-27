@@ -81,8 +81,14 @@ class Program
 
     static void AssignL5IDHandlers(WebApplication app)
     {
-        const string L5ID_BASE = "/l5id/api/v1/";
-        app.MapGet(L5ID_BASE+"active/", async ctx =>
+        const string L5ID_BASE = "/api/v1/";
+        // for Puni 
+        app.MapGet("/l5id" + L5ID_BASE +"active/", async ctx =>
+        {
+            await ActiveHandler.HandleAsync(ctx);
+        });
+        //For WibWob
+        app.MapGet(L5ID_BASE + "active.nhn/", async ctx =>
         {
             await ActiveHandler.HandleAsync(ctx);
         });
