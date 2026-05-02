@@ -401,3 +401,5 @@ Resources
 Tools/DataDownload
 Tools/db.json
 Tools/sharedLogic/__pycache__
+Tools/eal
+Tools/ywp_mst_version_resource.json

@@ -87,12 +87,16 @@ class Program
         {
             await ActiveHandler.HandleAsync(ctx);
         });
+        app.MapGet("/l5id" + L5ID_BASE + "create_gdkey/", async ctx =>
+        {
+            await CreateGDKeyHandler.HandleAsync(ctx);
+        });
         //For WibWob
         app.MapGet(L5ID_BASE + "active.nhn/", async ctx =>
         {
             await ActiveHandler.HandleAsync(ctx);
         });
-        app.MapGet(L5ID_BASE + "create_gdkey/", async ctx =>
+        app.MapGet(L5ID_BASE + "create_gdkey.nhn/", async ctx =>
         {
             await CreateGDKeyHandler.HandleAsync(ctx);
         });
